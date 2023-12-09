@@ -16,6 +16,9 @@ class ReportSpider(scrapy.Spider):
                 'title': article.css('div.title a::text').get(),
             }
 
+            if not data['image'].startswith('http'):
+                data['image'] = ''.join(('https://news.am', data['image']))
+
             sub_url = article.css('a.photo-link::attr(href)').get()
             yield response.follow(
                 url=sub_url,
