@@ -1,0 +1,10 @@
+Django==4.1.2
+Scrapy
+Pillow
+celery
+django-celery-beat
+asgiref
+redis
+twisted
+scrapy-djangoitem
+requests

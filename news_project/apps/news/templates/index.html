@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .report-container {
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .report-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="report-items" >
+    {% for report in reports %}
+        <div className="report-container">
+            <h2>{{ report.title }}</h2>
+            <p>{{ report.sub_text }}</p>
+            <img src="{{ report.image }}" alt="Report Image 1" className="report-image">
+            {% if report.summary_report %}
+                <div>
+                    <h1>Summery of 5 reports</h1>
+                    <p>{{ report.summary_report }}</p>
+                </div>
+            {% endif %}}
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+
+</html>

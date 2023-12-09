@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  news_project:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    env_file:
+      - .env
+    entrypoint: /app/docker/backend/server-entrypoint.sh
+    ports:
+      - "8000:8000"
+    volumes:
+      - './media:/usr/src/news_project/media'
+  rabbit:
+    restart: unless-stopped
+    hostname: rabbit
+    image: rabbitmq:3-management
+    env_file:
+      - .env
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+  worker:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    entrypoint: /app/docker/backend/worker-entrypoint.sh
+    volumes:
+      - ./project/:/usr/src/app/
+    env_file:
+      - .env
+    depends_on:
+      - news_project
+      - rabbit
+  celery-beat:
+      restart: unless-stopped
+      build:
+        context: .
+        dockerfile: ./docker/backend/Dockerfile
+      entrypoint: /app/docker/backend/worker-beat-entrypoint.sh
+      volumes:
+        - ./project/:/usr/src/app/
+      env_file:
+        - .env
+      depends_on:
+        - news_project
+        - rabbit
