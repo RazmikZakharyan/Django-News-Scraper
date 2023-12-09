@@ -27,7 +27,16 @@ class ReportSpider(scrapy.Spider):
             )
 
     def parse_subpage(self, response):
-        text_list = response.css('div#opennewstext p::text').extract()
+        css_path = (
+            'div#opennewstext p::text',
+            'span.article-body p span::text',
+            'span.article-body p::text',
+        )
+        text_list = ()
+        for item in css_path:
+            text_list = response.css(item).extract()
+            if text_list:
+                break
 
         main_data = response.meta['main_data']
 
