@@ -12,7 +12,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - './media:/usr/src/news_project/media'
+      - project:/app/news_project
   rabbit:
     restart: unless-stopped
     hostname: rabbit
@@ -22,6 +22,8 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - project:/app/news_project
   worker:
     restart: unless-stopped
     build:
@@ -29,22 +31,24 @@ services:
       dockerfile: ./docker/backend/Dockerfile
     entrypoint: /app/docker/backend/worker-entrypoint.sh
     volumes:
-      - ./project/:/usr/src/app/
+      - project:/app/news_project
     env_file:
       - .env
     depends_on:
       - news_project
       - rabbit
   celery-beat:
-      restart: unless-stopped
-      build:
-        context: .
-        dockerfile: ./docker/backend/Dockerfile
-      entrypoint: /app/docker/backend/worker-beat-entrypoint.sh
-      volumes:
-        - ./project/:/usr/src/app/
-      env_file:
-        - .env
-      depends_on:
-        - news_project
-        - rabbit
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    entrypoint: /app/docker/backend/worker-beat-entrypoint.sh
+    volumes:
+      - project:/app/news_project
+    env_file:
+      - .env
+    depends_on:
+      - news_project
+      - rabbit
+volumes:
+  project:

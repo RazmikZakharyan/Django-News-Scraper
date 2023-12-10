@@ -1,7 +1,4 @@
-import requests
-
 from django.views.generic import TemplateView
-from config.settings import CHATGPT_API_KEY
 
 from .models import ReportModel
 from .tasks import scrapy_task
@@ -25,8 +22,6 @@ class ScrapeView(TemplateView):
                 'reports': reports
             }
         )
-
-    
 
     @staticmethod
     def limit_to_50_words(text):

@@ -8,3 +8,5 @@ redis
 twisted
 scrapy-djangoitem
 requests
+opencv-python
+numpy

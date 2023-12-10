@@ -1,6 +1,7 @@
 import requests
 
 from celery import shared_task
+from django.core.files.base import ContentFile
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from scrapy.signalmanager import dispatcher
@@ -9,6 +10,7 @@ from scrapy import signals
 
 from config.settings import CHATGPT_API_KEY
 from .models import ReportModel
+from .faces_detection.highlight_faces import highlight_faces
 
 
 def get_summary_report(report_text):
@@ -50,12 +52,22 @@ def scrapy_task():
     reports_text = []
     report = None
     for result in results:
+        image_bytes = result.pop('image_bytes')
+        image_url = result.pop('image_url').split('/')[-1]
         report = ReportModel(**result)
         if len(reports_text) == 5:
             report.summary_report = get_summary_report(
                 ' '.join(reports_text)
             )
             reports_text = []
+
+        image_bytes = highlight_faces(image_bytes)
+
+        report.image.save(
+            image_url,
+            ContentFile(image_bytes),
+            save=False
+        )
 
         report.save()
         reports_text.append(result.get('sub_text'))
@@ -64,5 +76,6 @@ def scrapy_task():
         report.summary_report = get_summary_report(
             ' '.join(reports_text)
         )
+        report.save()
 
     return True

@@ -17,7 +17,7 @@ app.conf.update(
 app.conf.beat_schedule = {
     'news': {
         'task': 'apps.news.tasks.scrapy_task',
-        'schedule': 60.0,
+        'schedule': 5 * 60.0,
     }
 }
 
