@@ -12,7 +12,7 @@ class ScrapeView(TemplateView):
             scrapy_task.delay()
 
         reports = []
-        for report in ReportModel.objects.all().values():
+        for report in ReportModel.objects.all().order_by('id').values():
             sub_text = report['sub_text']
             report['sub_text'] = self.limit_to_50_words(sub_text)
             reports.append(report)

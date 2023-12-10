@@ -31,7 +31,8 @@ def get_summary_report(report_text):
     response = requests.post(chatgpt_api_url, headers=headers, json=data)
     response_data = response.json()
     if response_data.get('choices'):
-        return response.json()['choices'][0]['message']['content']
+        return response_data['choices'][0]['message']['content']
+    print(response_data)
     return "Try later"
 
 

@@ -118,9 +118,9 @@ RABBITMQ = {
     "USER": os.environ.get("RABBITMQ_DEFAULT_USER"),
     "PASSWORD":  os.environ.get("RABBITMQ_DEFAULT_PASS"),
 }
-CELERY_BROKER_URL = f'amqp://{RABBITMQ["USER"]}:{RABBITMQ["PASSWORD"]}@{RABBITMQ["SERVER"]}:5672//'
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+# CELERY_BROKER_URL = f'amqp://{RABBITMQ["USER"]}:{RABBITMQ["PASSWORD"]}@{RABBITMQ["SERVER"]}:5672//'
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # for local
-# CELERY_BROKER_URL = "redis://localhost:6379/0"
-# CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
