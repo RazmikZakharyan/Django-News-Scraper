@@ -7,7 +7,7 @@ from scrapy.signalmanager import dispatcher
 from scraper.scraper.spiders.report_spider import ReportSpider
 from scrapy import signals
 
-from news_project.settings import CHATGPT_API_KEY
+from config.settings import CHATGPT_API_KEY
 from .models import ReportModel
 
 
